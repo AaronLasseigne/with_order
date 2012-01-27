@@ -4,7 +4,11 @@ module AddOrder
 
     included do
       def self.add_order(params)
-        order("#{params[:sort]} #{params[:dir]}")
+        if params[:sort].present?
+          order("#{params[:sort]} #{params[:dir]}")
+        else
+          self
+        end
       end
     end
   end
