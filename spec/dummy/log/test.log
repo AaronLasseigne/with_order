@@ -1,0 +1,28 @@
+  [1m[36m (0.1ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (2.5ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("schema_migrations")[0m
+  [1m[35m (1.3ms)[0m  CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to CreateNobelPrizeWinners (20120127203225)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mCREATE TABLE "nobel_prize_winners" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "first_name" varchar(255), "last_name" varchar(255), "category" varchar(255), "year" integer) [0m
+  [1m[35mSQL (39.1ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Peace"], ["first_name", "Norman"], ["last_name", "Borlaug"], ["year", 1970]]
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Chemistry"], ["first_name", "Paul"], ["last_name", "Flory"], ["year", 1974]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physics"], ["first_name", "Albert"], ["last_name", "Eintein"], ["year", 1921]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Literature"], ["first_name", "Samuel"], ["last_name", "Beckett"], ["year", 1969]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physics"], ["first_name", "Niels"], ["last_name", "Bohr"], ["year", 1922]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Physics"], ["first_name", "Erwin"], ["last_name", "Schrodinger"], ["year", 1933]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physics"], ["first_name", "Paul"], ["last_name", "Dirac"], ["year", 1933]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Physics"], ["first_name", "Enrico"], ["last_name", "Fermi"], ["year", 1938]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physics"], ["first_name", "Richard"], ["last_name", "Feynman"], ["year", 1965]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Chemistry"], ["first_name", "Marie"], ["last_name", "Curie"], ["year", 1911]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physiology or Medicine"], ["first_name", "James"], ["last_name", "Watson"], ["year", 1962]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Literature"], ["first_name", "Bertrand"], ["last_name", "Russell"], ["year", 1950]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Literature"], ["first_name", "John"], ["last_name", "Steinbeck"], ["year", 1962]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Peace"], ["first_name", "Nelson"], ["last_name", "Mandela"], ["year", 1993]]
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physiology or Medicine"], ["first_name", "Jacques"], ["last_name", "Monod"], ["year", 1965]]
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20120127203225')[0m
+  [1m[35m (1.3ms)[0m  commit transaction
+  [1m[36m (0.2ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations" 
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("nobel_prize_winners")[0m
