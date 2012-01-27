@@ -5,7 +5,7 @@ module AddOrder
     included do
       def self.add_order(params)
         if params[:sort].present?
-          order("#{params[:sort]} #{params[:dir]}")
+          order("#{params[:sort]} #{params[:dir] || 'ASC'}")
         else
           self
         end
