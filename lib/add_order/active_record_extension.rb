@@ -4,11 +4,13 @@ module AddOrder
 
     included do
       def self.add_order(params, options = {})
-        return self if params[:sort].blank?
+        sort_field = params[:sort] || options[:default]
 
-        order_text = "#{params[:sort]} ASC"
-        if options[:fields] and options[:fields][params[:sort].to_sym]
-          order_text = options[:fields][params[:sort].to_sym]
+        return self if sort_field.blank?
+
+        order_text = "#{sort_field} ASC"
+        if options[:fields] and options[:fields][sort_field.to_sym]
+          order_text = options[:fields][sort_field.to_sym]
         end
 
         if params[:dir] and params[:dir].downcase == 'desc'

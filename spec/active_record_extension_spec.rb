@@ -56,5 +56,19 @@ describe 'AddOrder::ActiveRecordExtention' do
         npw.reverse_order_value.should be true
       end
     end
+
+    context 'options include :default to select a default field to order by' do
+      it 'should default to the field when no :sort param is passed' do
+        npw = NobelPrizeWinner.add_order({}, {default: 'first_name'})
+        npw.order_values.should == ['first_name ASC']
+        npw.reverse_order_value.should == nil
+      end
+
+      it 'should not default to the field when a :sort param is passed' do
+        npw = NobelPrizeWinner.add_order({sort: 'first_name'}, {default: 'last_name'})
+        npw.order_values.should == ['first_name ASC']
+        npw.reverse_order_value.should == nil
+      end
+    end
   end
 end
