@@ -1,15 +1,23 @@
 require 'spec_helper'
 
 describe 'AddOrder::ActiveRecordExtention' do
-  describe '#add_order(params)' do
-    it 'can be the only scope in the chain' do
+  describe '#add_order(params, options = {})' do
+    it 'orders using a field' do
       npw = NobelPrizeWinner.add_order({sort: 'first_name', dir: 'asc'})
-      npw.order_values.should == ['first_name asc']
+      npw.order_values.should == ['first_name ASC']
+      npw.reverse_order_value.should == nil
+    end
+
+    it 'reverses order using a field' do
+      npw = NobelPrizeWinner.add_order({sort: 'first_name', dir: 'desc'})
+      npw.order_values.should == ['first_name ASC']
+      npw.reverse_order_value.should be true
     end
 
     it 'does not break the chain' do
       npw = NobelPrizeWinner.add_order({sort: 'first_name', dir: 'asc'}).limit(1)
-      npw.order_values.should == ['first_name asc']
+      npw.order_values.should == ['first_name ASC']
+      npw.reverse_order_value.should == nil
     end
 
     context 'params do not include :sort' do
@@ -23,6 +31,29 @@ describe 'AddOrder::ActiveRecordExtention' do
       it 'defaults to "ASC"' do
         npw = NobelPrizeWinner.add_order({sort: 'first_name'})
         npw.order_values.should == ['first_name ASC']
+        npw.reverse_order_value.should == nil
+      end
+    end
+
+    context 'options include :fields to define custom ORDER BY statements' do
+      it 'orders using custom fields' do
+        npw = NobelPrizeWinner.add_order({sort: 'full_name'}, {
+          fields: {
+            full_name: 'first_name ASC, last_name ASC'
+          }
+        })
+        npw.order_values.should == ['first_name ASC, last_name ASC']
+        npw.reverse_order_value.should == nil
+      end
+
+      it 'reverses order using custom fields' do
+        npw = NobelPrizeWinner.add_order({sort: 'full_name', dir: 'desc'}, {
+          fields: {
+            full_name: 'first_name ASC, last_name ASC'
+          }
+        })
+        npw.order_values.should == ['first_name ASC, last_name ASC']
+        npw.reverse_order_value.should be true
       end
     end
   end
