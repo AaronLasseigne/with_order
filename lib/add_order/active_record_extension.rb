@@ -3,21 +3,19 @@ module AddOrder
     extend ActiveSupport::Concern
 
     included do
-      def self.add_order(params, options = {})
-        sort_field = params[:sort] || options[:default]
+      class << self
+        alias_method_chain :inherited, :add_order
+      end
 
-        return self if sort_field.blank?
+      self.descendants.each do |descendant|
+        descendant.send(:include, AddOrder::ActiveRecordModelExtension) if descendant.ancestors.include?(ActiveRecord::Base)
+      end
+    end
 
-        order_text = "#{sort_field} ASC"
-        if options[:fields] and options[:fields][sort_field.to_sym]
-          order_text = options[:fields][sort_field.to_sym]
-        end
-
-        if params[:dir] and params[:dir].downcase == 'desc'
-          order(order_text).reverse_order
-        else
-          order(order_text)
-        end
+    module ClassMethods
+      def inherited_with_add_order(base)
+        inherited_without_add_order(base)
+        base.send(:include, AddOrder::ActiveRecordModelExtension) if base.ancestors.include?(ActiveRecord::Base)
       end
     end
   end

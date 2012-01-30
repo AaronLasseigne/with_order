@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'AddOrder::ActiveRecordExtention' do
+describe 'AddOrder::ActiveRecordModelExtention' do
   describe '#add_order(params, options = {})' do
     it 'orders using a field' do
       npw = NobelPrizeWinner.add_order({sort: 'first_name', dir: 'asc'})
