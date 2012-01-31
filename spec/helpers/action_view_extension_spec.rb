@@ -5,26 +5,29 @@ describe AddOrder::ActionViewExtension do
     context 'the current field sorted on is "first_name"' do
       it 'reverses the existing :dir if the field is "first_name"' do
         helper.stub!(:params).and_return({sort: 'first_name', dir: 'asc'})
+        npw = NobelPrizeWinner.add_order(helper.params)
         helper.add_order_link(
-          (helper.params[:sort] == 'first_name' and helper.params[:dir].try(:downcase) == 'asc') ? 'DESC' : 'ASC',
+          (npw.current_ordered_field == :first_name and npw.current_ordered_dir == 'asc') ? 'DESC' : 'ASC',
           :first_name
         ).should == '<a href="/assets?dir=desc&amp;sort=first_name">DESC</a>'
       end
 
       it 'creates an "asc" sort for fields other than "first_name"' do
         helper.stub!(:params).and_return({sort: 'first_name', dir: 'asc'})
+        npw = NobelPrizeWinner.add_order(helper.params)
         helper.add_order_link(
-          (helper.params[:sort] == 'last_name' and helper.params[:dir].try(:downcase) == 'asc') ? 'DESC' : 'ASC',
+          (npw.current_ordered_field == :last_name and npw.current_ordered_dir == 'asc') ? 'DESC' : 'ASC',
           :last_name
         ).should == '<a href="/assets?dir=asc&amp;sort=last_name">ASC</a>'
       end
 
-      it 'defaults to "asc" if no :dir param is given' do
+      it 'defaults to "desc" if no :dir param is given' do
         helper.stub!(:params).and_return({sort: 'first_name'})
+        npw = NobelPrizeWinner.add_order(helper.params)
         helper.add_order_link(
-          (helper.params[:sort] == 'first_name' and helper.params[:dir].try(:downcase) == 'asc') ? 'DESC' : 'ASC',
+          (npw.current_ordered_field == :first_name and npw.current_ordered_dir == 'asc') ? 'DESC' : 'ASC',
           :first_name
-        ).should == '<a href="/assets?dir=asc&amp;sort=first_name">ASC</a>'
+        ).should == '<a href="/assets?dir=desc&amp;sort=first_name">DESC</a>'
       end
     end
 
@@ -50,8 +53,9 @@ describe AddOrder::ActionViewExtension do
 
     it 'accepts blocks' do
       helper.stub!(:params).and_return({sort: 'first_name', dir: 'asc'})
+      npw = NobelPrizeWinner.add_order(helper.params)
       output = helper.add_order_link(:first_name, {remote: true}) do
-        (helper.params[:sort] == 'first_name' and helper.params[:dir].try(:downcase) == 'asc') ? 'DESC' : 'ASC'
+        (npw.current_ordered_field == :first_name and npw.current_ordered_dir == 'asc') ? 'DESC' : 'ASC'
       end
       output.should == '<a href="/assets?dir=desc&amp;sort=first_name" data-remote="true">DESC</a>'
     end
