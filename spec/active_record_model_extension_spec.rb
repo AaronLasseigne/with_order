@@ -71,4 +71,20 @@ describe 'AddOrder::ActiveRecordModelExtention' do
       end
     end
   end
+
+  describe 'AddOrder::ActiveRecordModelExtension::RelationExtension' do
+    context '#current_ordered_field' do
+      it 'returns the field being ordered on' do
+        npw = NobelPrizeWinner.add_order({sort: 'first_name', dir: 'asc'})
+        npw.current_ordered_field.should == :first_name
+      end
+    end
+
+    context '#current_ordered_dir' do
+      it 'returns the direction of the order' do
+        npw = NobelPrizeWinner.add_order({sort: 'first_name', dir: 'asc'})
+        npw.current_ordered_dir.should == 'asc'
+      end
+    end
+  end
 end
