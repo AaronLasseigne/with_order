@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ['Aaron Lasseigne']
   s.email       = ['alasseigne@sei-mi.com']
   s.homepage    = 'https://github.com/sei-mi/add_order'
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Add ordering to lists, tables, etc.}
+  s.description = %q{Add ordering to lists, tables, etc.}
 
   s.rubyforge_project = 'add_order'
 
