@@ -7,7 +7,7 @@ describe WithOrder::ActionViewExtension do
         helper.stub!(:params).and_return({order: 'first_name', dir: 'asc'})
         npw = NobelPrizeWinner.with_order(helper.params)
         helper.with_order_link(
-          (npw.current_ordered_field == :first_name and npw.current_ordered_dir == 'asc') ? 'DESC' : 'ASC',
+          (npw.current_order[:field] == :first_name and npw.current_order[:dir] == 'asc') ? 'DESC' : 'ASC',
           :first_name
         ).should == '<a href="/assets?dir=desc&amp;order=first_name">DESC</a>'
       end
@@ -16,7 +16,7 @@ describe WithOrder::ActionViewExtension do
         helper.stub!(:params).and_return({order: 'first_name', dir: 'asc'})
         npw = NobelPrizeWinner.with_order(helper.params)
         helper.with_order_link(
-          (npw.current_ordered_field == :last_name and npw.current_ordered_dir == 'asc') ? 'DESC' : 'ASC',
+          (npw.current_order[:field] == :last_name and npw.current_order[:dir] == 'asc') ? 'DESC' : 'ASC',
           :last_name
         ).should == '<a href="/assets?dir=asc&amp;order=last_name">ASC</a>'
       end
@@ -25,7 +25,7 @@ describe WithOrder::ActionViewExtension do
         helper.stub!(:params).and_return({order: 'first_name'})
         npw = NobelPrizeWinner.with_order(helper.params)
         helper.with_order_link(
-          (npw.current_ordered_field == :first_name and npw.current_ordered_dir == 'asc') ? 'DESC' : 'ASC',
+          (npw.current_order[:field] == :first_name and npw.current_order[:dir] == 'asc') ? 'DESC' : 'ASC',
           :first_name
         ).should == '<a href="/assets?dir=desc&amp;order=first_name">DESC</a>'
       end
@@ -55,7 +55,7 @@ describe WithOrder::ActionViewExtension do
       helper.stub!(:params).and_return({order: 'first_name', dir: 'asc'})
       npw = NobelPrizeWinner.with_order(helper.params)
       output = helper.with_order_link(:first_name, {remote: true}) do
-        (npw.current_ordered_field == :first_name and npw.current_ordered_dir == 'asc') ? 'DESC' : 'ASC'
+        (npw.current_order[:field] == :first_name and npw.current_order[:dir] == 'asc') ? 'DESC' : 'ASC'
       end
       output.should == '<a href="/assets?dir=desc&amp;order=first_name" data-remote="true">DESC</a>'
     end

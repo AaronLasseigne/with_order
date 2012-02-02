@@ -72,18 +72,19 @@ describe 'WithOrder::ActiveRecordModelExtention' do
     end
   end
 
-  describe 'WithOrder::ActiveRecordModelExtension::RelationExtension' do
-    context '#current_ordered_field' do
+  describe 'WithOrder::ActiveRecordModelExtension Relation' do
+    context '#current_order' do
       it 'returns the field being ordered on' do
         npw = NobelPrizeWinner.with_order({order: 'first_name', dir: 'asc'})
-        npw.current_ordered_field.should == :first_name
+        # fix the symbol/string inconsistency later
+        npw.current_order[:field].should == :first_name
+        npw.current_order[:dir].should == 'asc'
       end
-    end
 
-    context '#current_ordered_dir' do
-      it 'returns the direction of the order' do
-        npw = NobelPrizeWinner.with_order({order: 'first_name', dir: 'asc'})
-        npw.current_ordered_dir.should == 'asc'
+      it 'returns nil for both :field and :dir if no field is ordered on' do
+        npw = NobelPrizeWinner.with_order({})
+        npw.current_order[:field].should == nil
+        npw.current_order[:dir].should == nil 
       end
     end
   end
