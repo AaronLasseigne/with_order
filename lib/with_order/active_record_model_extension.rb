@@ -16,7 +16,7 @@ module WithOrder
       scope :with_order, ->(params, options = {}) {
         relation = scoped.extending(RelationExtension) do
           define_method :current_ordered_field do
-            current_field = "#{(params[:sort] || options[:default])}"
+            current_field = "#{(params[:order] || options[:default])}"
             current_field = nil if current_field.blank?
             current_field.try(:to_sym)
           end
