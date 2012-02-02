@@ -1,6 +1,6 @@
-module AddOrder
+module WithOrder
   module ActionViewExtension
-    def add_order_link(*args, &block)
+    def with_order_link(*args, &block)
       text = field = ''
       html_options = {}
 

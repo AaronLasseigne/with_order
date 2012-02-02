@@ -1,17 +1,17 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path('../lib', __FILE__)
-require 'add_order/version'
+require 'with_order/version'
 
 Gem::Specification.new do |s|
-  s.name        = 'add_order'
-  s.version     = AddOrder::VERSION
+  s.name        = 'with_order'
+  s.version     = WithOrder::VERSION
   s.authors     = ['Aaron Lasseigne']
   s.email       = ['alasseigne@sei-mi.com']
-  s.homepage    = 'https://github.com/sei-mi/add_order'
+  s.homepage    = 'https://github.com/sei-mi/with_order'
   s.summary     = %q{Add ordering to lists, tables, etc.}
   s.description = %q{Add ordering to lists, tables, etc.}
 
-  s.rubyforge_project = 'add_order'
+  s.rubyforge_project = 'with_order'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

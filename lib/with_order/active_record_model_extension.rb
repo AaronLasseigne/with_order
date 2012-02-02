@@ -1,4 +1,4 @@
-module AddOrder
+module WithOrder
   module ActiveRecordModelExtension
     extend ActiveSupport::Concern
 
@@ -13,7 +13,7 @@ module AddOrder
     end
 
     included do
-      scope :add_order, ->(params, options = {}) {
+      scope :with_order, ->(params, options = {}) {
         relation = scoped.extending(RelationExtension) do
           define_method :current_ordered_field do
             current_field = "#{(params[:sort] || options[:default])}"
