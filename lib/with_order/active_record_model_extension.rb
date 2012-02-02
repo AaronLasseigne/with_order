@@ -6,11 +6,15 @@ module WithOrder
       scope :with_order, ->(params, options = {}) {
         relation = scoped.extending do
           define_method :current_order do
-            current_field = "#{(params[:order] || options[:default])}"
+            field = dir = nil
+            field, dir = params[:order].match(/^(.*?)(?:-(asc|desc))?$/i).captures if params[:order]
+            dir ||= 'asc'
+
+            current_field = "#{(field || options[:default])}"
             if current_field.blank?
               {field: nil, dir: nil}
             else
-              {field: current_field.to_sym, dir: self.reverse_order_value ? 'desc' : 'asc'}
+              {field: current_field.to_sym, dir: (dir || (self.reverse_order_value ? 'desc' : 'asc'))}
             end
           end
         end
@@ -22,7 +26,7 @@ module WithOrder
           order_text = options[:fields][relation.current_order[:field]]
         end
 
-        if params[:dir] and params[:dir].downcase == 'desc'
+        if relation.current_order[:dir].try(:downcase) == 'desc'
           relation.order(order_text).reverse_order
         else
           relation.order(order_text)

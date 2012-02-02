@@ -3,19 +3,19 @@ require 'spec_helper'
 describe 'WithOrder::ActiveRecordModelExtention' do
   describe '#with_order(params, options = {})' do
     it 'orders using a field' do
-      npw = NobelPrizeWinner.with_order({order: 'first_name', dir: 'asc'})
+      npw = NobelPrizeWinner.with_order({order: 'first_name-asc'})
       npw.order_values.should == ['first_name ASC']
       npw.reverse_order_value.should == nil
     end
 
     it 'reverses order using a field' do
-      npw = NobelPrizeWinner.with_order({order: 'first_name', dir: 'desc'})
+      npw = NobelPrizeWinner.with_order({order: 'first_name-desc'})
       npw.order_values.should == ['first_name ASC']
       npw.reverse_order_value.should be true
     end
 
     it 'does not break the chain' do
-      npw = NobelPrizeWinner.with_order({order: 'first_name', dir: 'asc'}).limit(1)
+      npw = NobelPrizeWinner.with_order({order: 'first_name-asc'}).limit(1)
       npw.order_values.should == ['first_name ASC']
       npw.reverse_order_value.should == nil
     end
@@ -27,7 +27,7 @@ describe 'WithOrder::ActiveRecordModelExtention' do
       end
     end
 
-    context 'params do not include :dir' do
+    context 'params do not include a direction' do
       it 'defaults to "ASC"' do
         npw = NobelPrizeWinner.with_order({order: 'first_name'})
         npw.order_values.should == ['first_name ASC']
@@ -47,7 +47,7 @@ describe 'WithOrder::ActiveRecordModelExtention' do
       end
 
       it 'reverses order using custom fields' do
-        npw = NobelPrizeWinner.with_order({order: 'full_name', dir: 'desc'}, {
+        npw = NobelPrizeWinner.with_order({order: 'full_name-desc'}, {
           fields: {
             full_name: 'first_name ASC, last_name ASC'
           }
@@ -75,7 +75,7 @@ describe 'WithOrder::ActiveRecordModelExtention' do
   describe 'WithOrder::ActiveRecordModelExtension Relation' do
     context '#current_order' do
       it 'returns the field being ordered on' do
-        npw = NobelPrizeWinner.with_order({order: 'first_name', dir: 'asc'})
+        npw = NobelPrizeWinner.with_order({order: 'first_name-asc'})
         # fix the symbol/string inconsistency later
         npw.current_order[:field].should == :first_name
         npw.current_order[:dir].should == 'asc'

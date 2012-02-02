@@ -15,9 +15,13 @@ module WithOrder
         html_options = args[3] || {}
       end
 
-      dir = html_options.delete(:dir) || ((scope.current_order[:field] == field and (scope.current_order[:dir].blank? or scope.current_order[:dir].downcase == 'asc')) ? 'desc' : 'asc')
+      dir = html_options.delete(:dir) || (
+        (scope.current_order[:field] == field and (scope.current_order[:dir].blank? or scope.current_order[:dir].downcase == 'asc')) ?
+        'desc' :
+        'asc'
+      )
 
-      link_to(text, params.merge({order: field, dir: dir}), html_options)
+      link_to(text, params.merge({order: "#{field}-#{dir}"}), html_options)
     end
   end
 end
