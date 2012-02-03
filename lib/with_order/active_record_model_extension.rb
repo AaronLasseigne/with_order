@@ -3,11 +3,16 @@ module WithOrder
     extend ActiveSupport::Concern
 
     included do
-      scope :with_order, ->(params, options = {}) {
+      scope :with_order, ->(order, options = {}) {
         relation = scoped.extending do
+          if order.is_a?(Hash)
+            order = order[:order]
+          end
+          order = order.to_s if order
+
           define_method :current_order do
             field = dir = nil
-            field, dir = params[:order].match(/^(.*?)(?:-(asc|desc))?$/i).captures if params[:order]
+            field, dir = order.match(/^(.*?)(?:-(asc|desc))?$/i).captures if order
             dir ||= 'asc'
 
             current_field = "#{(field || options[:default])}"

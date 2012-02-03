@@ -1,11 +1,25 @@
 require 'spec_helper'
 
 describe 'WithOrder::ActiveRecordModelExtention' do
-  describe '#with_order(params, options = {})' do
-    it 'orders using a field' do
-      npw = NobelPrizeWinner.with_order({order: 'first_name-asc'})
-      npw.order_values.should == ['first_name ASC']
-      npw.reverse_order_value.should == nil
+  describe '#with_order(order, options = {})' do
+    context 'orders using a field' do
+      it 'where the order is a hash containing :order' do
+        npw = NobelPrizeWinner.with_order({order: 'first_name-asc'})
+        npw.order_values.should == ['first_name ASC']
+        npw.reverse_order_value.should == nil
+      end
+
+      it 'where the order is a symbol' do
+        npw = NobelPrizeWinner.with_order(:first_name)
+        npw.order_values.should == ['first_name ASC']
+        npw.reverse_order_value.should == nil
+      end
+
+      it 'where the order is a string' do
+        npw = NobelPrizeWinner.with_order('first_name-asc')
+        npw.order_values.should == ['first_name ASC']
+        npw.reverse_order_value.should == nil
+      end
     end
 
     it 'reverses order using a field' do
