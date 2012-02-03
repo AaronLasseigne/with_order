@@ -30,7 +30,13 @@ module WithOrder
         if options[:fields] and options[:fields][relation.current_order[:field]]
           order_text = options[:fields][relation.current_order[:field]]
         else
-          order_text = "#{relation.connection.quote_column_name(relation.current_order[:field])} ASC"
+          field = relation.current_order[:field].to_s
+
+          if field !~ /\./ and relation.column_names.include?(field)
+            field = "#{self.table_name}.#{field}"
+          end
+
+          order_text = "#{relation.connection.quote_column_name(field)} ASC"
         end
 
         if relation.current_order[:dir].try(:downcase) == 'desc'
