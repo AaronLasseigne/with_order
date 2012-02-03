@@ -26,9 +26,11 @@ module WithOrder
 
         return relation unless relation.current_order[:field]
 
-        order_text = "#{relation.current_order[:field]} ASC"
+        order_text = ''
         if options[:fields] and options[:fields][relation.current_order[:field]]
           order_text = options[:fields][relation.current_order[:field]]
+        else
+          order_text = "#{relation.connection.quote_column_name(relation.current_order[:field])} ASC"
         end
 
         if relation.current_order[:dir].try(:downcase) == 'desc'
