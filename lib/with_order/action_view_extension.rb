@@ -16,7 +16,7 @@ module WithOrder
       end
 
       dir = html_options.delete(:dir) || (
-        (scope.current_order[:field] == field and (scope.current_order[:dir].blank? or scope.current_order[:dir].downcase == 'asc')) ?
+        (scope.current_order[:field] == field and (scope.current_order[:dir].blank? or scope.current_order[:dir].downcase == :asc)) ?
         'desc' :
         'asc'
       )

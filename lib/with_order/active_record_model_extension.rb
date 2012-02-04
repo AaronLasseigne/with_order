@@ -13,15 +13,15 @@ module WithOrder
           define_method :current_order do
             field = dir = nil
             field, dir = order.match(/^(.*?)(?:-(asc|desc))?$/i).captures if order
-            dir ||= 'asc'
+            dir ||= :asc
 
             current_field = "#{(field || options[:default])}"
             if current_field.blank?
               {field: nil, dir: nil, param_namespace: nil}
             else
               {
-                field:     current_field.to_sym,
-                dir:       (dir || (self.reverse_order_value ? 'desc' : 'asc')),
+                field:           current_field.to_sym,
+                dir:             (dir.to_sym || (self.reverse_order_value ? :desc : :asc)),
                 param_namespace: options[:param_namespace].try(:to_sym)
               }
             end
@@ -43,7 +43,7 @@ module WithOrder
           order_text = "#{relation.connection.quote_column_name(field)} ASC"
         end
 
-        if relation.current_order[:dir].try(:downcase) == 'desc'
+        if relation.current_order[:dir].try(:downcase) == :desc
           relation.order(order_text).reverse_order
         else
           relation.order(order_text)

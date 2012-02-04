@@ -115,7 +115,7 @@ describe 'WithOrder::ActiveRecordModelExtention' do
         npw = NobelPrizeWinner.with_order({order: 'first_name-asc'})
         # fix the symbol/string inconsistency later
         npw.current_order[:field].should == :first_name
-        npw.current_order[:dir].should == 'asc'
+        npw.current_order[:dir].should == :asc
         npw.current_order[:param_namespace].should == nil 
       end
 
@@ -129,7 +129,7 @@ describe 'WithOrder::ActiveRecordModelExtention' do
       it 'returns the :param_namespace if passed' do
         npw = NobelPrizeWinner.with_order(:first_name, {param_namespace: :foo})
         npw.current_order[:field].should == :first_name
-        npw.current_order[:dir].should == 'asc'
+        npw.current_order[:dir].should == :asc
         npw.current_order[:param_namespace].should == :foo 
       end
     end

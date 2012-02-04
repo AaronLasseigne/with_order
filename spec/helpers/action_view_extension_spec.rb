@@ -7,7 +7,7 @@ describe WithOrder::ActionViewExtension do
         helper.stub!(:params).and_return({order: 'first_name-asc'})
         npw = NobelPrizeWinner.with_order(helper.params)
         helper.link_with_order(
-          (npw.current_order[:field] == :first_name and npw.current_order[:dir] == 'asc') ? 'DESC' : 'ASC',
+          (npw.current_order[:field] == :first_name and npw.current_order[:dir] == :asc) ? 'DESC' : 'ASC',
           npw,
           :first_name
         ).should == '<a href="/assets?order=first_name-desc">DESC</a>'
@@ -17,7 +17,7 @@ describe WithOrder::ActionViewExtension do
         helper.stub!(:params).and_return({order: 'first_name-asc'})
         npw = NobelPrizeWinner.with_order(helper.params)
         helper.link_with_order(
-          (npw.current_order[:field] == :last_name and npw.current_order[:dir] == 'asc') ? 'DESC' : 'ASC',
+          (npw.current_order[:field] == :last_name and npw.current_order[:dir] == :asc) ? 'DESC' : 'ASC',
           npw,
           :last_name
         ).should == '<a href="/assets?order=last_name-asc">ASC</a>'
@@ -27,7 +27,7 @@ describe WithOrder::ActionViewExtension do
         helper.stub!(:params).and_return({order: 'first_name'})
         npw = NobelPrizeWinner.with_order(helper.params)
         helper.link_with_order(
-          (npw.current_order[:field] == :first_name and npw.current_order[:dir] == 'asc') ? 'DESC' : 'ASC',
+          (npw.current_order[:field] == :first_name and npw.current_order[:dir] == :asc) ? 'DESC' : 'ASC',
           npw,
           :first_name
         ).should == '<a href="/assets?order=first_name-desc">DESC</a>'
@@ -42,7 +42,7 @@ describe WithOrder::ActionViewExtension do
           'ASC',
           npw,
           :first_name,
-          {dir: 'asc'}
+          {dir: :asc}
         ).should == '<a href="/assets?order=first_name-asc">ASC</a>'
       end
     end
@@ -52,7 +52,7 @@ describe WithOrder::ActionViewExtension do
         helper.stub!(:params).and_return({foo: {order: 'first_name-asc'}})
         npw = NobelPrizeWinner.with_order(helper.params, {param_namespace: :foo})
         helper.link_with_order(
-          (npw.current_order[:field] == :first_name and npw.current_order[:dir] == 'asc') ? 'DESC' : 'ASC',
+          (npw.current_order[:field] == :first_name and npw.current_order[:dir] == :asc) ? 'DESC' : 'ASC',
           npw,
           :first_name
         ).should == '<a href="/assets?foo%5Border%5D=first_name-desc">DESC</a>'
@@ -66,7 +66,7 @@ describe WithOrder::ActionViewExtension do
         'ASC',
         npw,
         :first_name,
-        {dir: 'asc', remote: true}
+        {dir: :asc, remote: true}
       ).should == '<a href="/assets?order=first_name-asc" data-remote="true">ASC</a>'
     end
 
@@ -74,7 +74,7 @@ describe WithOrder::ActionViewExtension do
       helper.stub!(:params).and_return({order: 'first_name-asc'})
       npw = NobelPrizeWinner.with_order(helper.params)
       output = helper.link_with_order(npw, :first_name, {remote: true}) do
-        (npw.current_order[:field] == :first_name and npw.current_order[:dir] == 'asc') ? 'DESC' : 'ASC'
+        (npw.current_order[:field] == :first_name and npw.current_order[:dir] == :asc) ? 'DESC' : 'ASC'
       end
       output.should == '<a href="/assets?order=first_name-desc" data-remote="true">DESC</a>'
     end
