@@ -3,7 +3,7 @@ module WithOrder
     extend ActiveSupport::Concern
 
     included do
-      scope :with_order, ->(order, options = {}) {
+      scope :with_order, ->(order = nil, options = {}) {
         relation = scoped.extending do
           if order.is_a?(Hash)
             order = order[:order]

@@ -51,14 +51,14 @@ describe 'WithOrder::ActiveRecordModelExtention' do
       npw.reverse_order_value.should == nil
     end
 
-    context 'params do not include :order' do
+    context 'order is blank' do
       it 'skips the order' do
-        npw = NobelPrizeWinner.with_order({}).limit(1)
+        npw = NobelPrizeWinner.with_order.limit(1)
         npw.order_values.should == []
       end
     end
 
-    context 'params do not include a direction' do
+    context 'order does not include a direction' do
       it 'defaults to "ASC"' do
         npw = NobelPrizeWinner.with_order({order: 'first_name'})
         npw.order_values.should == ['"nobel_prize_winners.first_name" ASC']
@@ -89,13 +89,13 @@ describe 'WithOrder::ActiveRecordModelExtention' do
     end
 
     context 'options include :default to select a default field to order by' do
-      it 'should default to the field when no :order param is passed' do
+      it 'defaults to the field when no order is passed' do
         npw = NobelPrizeWinner.with_order({}, {default: 'first_name'})
         npw.order_values.should == ['"nobel_prize_winners.first_name" ASC']
         npw.reverse_order_value.should == nil
       end
 
-      it 'should not default to the field when a :order param is passed' do
+      it 'does not default to the field when a order is passed' do
         npw = NobelPrizeWinner.with_order({order: 'first_name'}, {default: 'last_name'})
         npw.order_values.should == ['"nobel_prize_winners.first_name" ASC']
         npw.reverse_order_value.should == nil
