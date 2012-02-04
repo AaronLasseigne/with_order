@@ -5,8 +5,8 @@ require 'with_order/action_view_extension'
 require 'with_order/version'
 
 ActiveSupport.on_load(:active_record) do
-  ActiveRecord::Base.send(:include, WithOrder::ActiveRecordExtension)
+  include WithOrder::ActiveRecordExtension
 end
 ActiveSupport.on_load(:action_view) do
-  ActionView::Base.send(:include, WithOrder::ActionViewExtension)
+  include WithOrder::ActionViewExtension
 end
