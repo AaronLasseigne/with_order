@@ -101,6 +101,12 @@ describe 'WithOrder::ActiveRecordModelExtention' do
         npw.reverse_order_value.should == nil
       end
     end
+
+    it 'accepts the :param_namespace option to scope the order param' do
+      npw = NobelPrizeWinner.with_order({foo: {order: 'first_name'}}, {param_namespace: :foo})
+      npw.order_values.should == ['"nobel_prize_winners.first_name" ASC']
+      npw.reverse_order_value.should == nil
+    end
   end
 
   describe 'WithOrder::ActiveRecordModelExtension Relation' do
@@ -110,12 +116,21 @@ describe 'WithOrder::ActiveRecordModelExtention' do
         # fix the symbol/string inconsistency later
         npw.current_order[:field].should == :first_name
         npw.current_order[:dir].should == 'asc'
+        npw.current_order[:param_namespace].should == nil 
       end
 
-      it 'returns nil for both :field and :dir if no field is ordered on' do
-        npw = NobelPrizeWinner.with_order({})
+      it 'returns nil for all keys if no field is ordered on' do
+        npw = NobelPrizeWinner.with_order
         npw.current_order[:field].should == nil
         npw.current_order[:dir].should == nil 
+        npw.current_order[:param_namespace].should == nil 
+      end
+
+      it 'returns the :param_namespace if passed' do
+        npw = NobelPrizeWinner.with_order(:first_name, {param_namespace: :foo})
+        npw.current_order[:field].should == :first_name
+        npw.current_order[:dir].should == 'asc'
+        npw.current_order[:param_namespace].should == :foo 
       end
     end
   end

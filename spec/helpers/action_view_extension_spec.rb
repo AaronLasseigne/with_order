@@ -47,6 +47,18 @@ describe WithOrder::ActionViewExtension do
       end
     end
 
+    context '#current_order on the scope includes a :param_namespace' do
+      it 'namespaces the :order param' do
+        helper.stub!(:params).and_return({foo: {order: 'first_name-asc'}})
+        npw = NobelPrizeWinner.with_order(helper.params, {param_namespace: :foo})
+        helper.link_with_order(
+          (npw.current_order[:field] == :first_name and npw.current_order[:dir] == 'asc') ? 'DESC' : 'ASC',
+          npw,
+          :first_name
+        ).should == '<a href="/assets?foo%5Border%5D=first_name-desc">DESC</a>'
+      end
+    end
+
     it 'accepts #link_to options' do
       helper.stub!(:params).and_return({order: 'first_name-asc'})
       npw = NobelPrizeWinner.with_order(helper.params)

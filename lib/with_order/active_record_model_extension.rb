@@ -6,7 +6,7 @@ module WithOrder
       scope :with_order, ->(order = nil, options = {}) {
         relation = scoped.extending do
           if order.is_a?(Hash)
-            order = order[:order]
+            order = options[:param_namespace] ? order[options[:param_namespace].to_sym][:order] : order[:order]
           end
           order = order.to_s if order
 
@@ -17,9 +17,13 @@ module WithOrder
 
             current_field = "#{(field || options[:default])}"
             if current_field.blank?
-              {field: nil, dir: nil}
+              {field: nil, dir: nil, param_namespace: nil}
             else
-              {field: current_field.to_sym, dir: (dir || (self.reverse_order_value ? 'desc' : 'asc'))}
+              {
+                field:     current_field.to_sym,
+                dir:       (dir || (self.reverse_order_value ? 'desc' : 'asc')),
+                param_namespace: options[:param_namespace].try(:to_sym)
+              }
             end
           end
         end
