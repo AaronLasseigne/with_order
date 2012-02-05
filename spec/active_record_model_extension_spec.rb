@@ -102,10 +102,18 @@ describe 'WithOrder::ActiveRecordModelExtention' do
       end
     end
 
-    it 'accepts the :param_namespace option to scope the order param' do
-      npw = NobelPrizeWinner.with_order({foo: {order: 'first_name'}}, {param_namespace: :foo})
-      npw.order_values.should == ['"nobel_prize_winners.first_name" ASC']
-      npw.reverse_order_value.should == nil
+    context 'the :param_namespace option is passed' do
+      it 'finds the :order param from the hash using the namespace' do
+        npw = NobelPrizeWinner.with_order({foo: {order: 'first_name'}}, {param_namespace: :foo})
+        npw.order_values.should == ['"nobel_prize_winners.first_name" ASC']
+        npw.reverse_order_value.should == nil
+      end
+
+      it 'skips order if it cannot find :order in the namespace' do
+        npw = NobelPrizeWinner.with_order({bar: {order: 'first_name'}}, {param_namespace: :foo})
+        npw.order_values.should == []
+        npw.reverse_order_value.should == nil
+      end
     end
   end
 

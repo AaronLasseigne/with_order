@@ -6,7 +6,9 @@ module WithOrder
       scope :with_order, ->(order = nil, options = {}) {
         relation = scoped.extending do
           if order.is_a?(Hash)
-            order = options[:param_namespace] ? order[options[:param_namespace].to_sym][:order] : order[:order]
+            order = options[:param_namespace] ?
+              order[options[:param_namespace].to_sym].try(:[], :order) :
+              order[:order]
           end
           order = (order || options[:default]).to_s
 
