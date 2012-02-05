@@ -8,19 +8,18 @@ module WithOrder
           if order.is_a?(Hash)
             order = options[:param_namespace] ? order[options[:param_namespace].to_sym][:order] : order[:order]
           end
-          order = order.to_s if order
+          order = (order || options[:default]).to_s
 
           define_method :current_order do
             field = dir = nil
             field, dir = order.match(/^(.*?)(?:-(asc|desc))?$/i).captures if order
             dir ||= :asc
 
-            current_field = "#{(field || options[:default])}"
-            if current_field.blank?
+            if field.blank?
               {field: nil, dir: nil, param_namespace: nil}
             else
               {
-                field:           current_field.to_sym,
+                field:           field.to_sym,
                 dir:             (dir.to_sym || (self.reverse_order_value ? :desc : :asc)),
                 param_namespace: options[:param_namespace].try(:to_sym)
               }

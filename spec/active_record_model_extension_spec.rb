@@ -90,9 +90,9 @@ describe 'WithOrder::ActiveRecordModelExtention' do
 
     context 'options include :default to select a default field to order by' do
       it 'defaults to the field when no order is passed' do
-        npw = NobelPrizeWinner.with_order({}, {default: 'first_name'})
+        npw = NobelPrizeWinner.with_order({}, {default: 'first_name-desc'})
         npw.order_values.should == ['"nobel_prize_winners.first_name" ASC']
-        npw.reverse_order_value.should == nil
+        npw.reverse_order_value.should be true
       end
 
       it 'does not default to the field when a order is passed' do
