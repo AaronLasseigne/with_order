@@ -121,7 +121,6 @@ describe 'WithOrder::ActiveRecordModelExtention' do
     context '#current_order' do
       it 'returns the field being ordered on' do
         npw = NobelPrizeWinner.with_order({order: 'first_name-asc'})
-        # fix the symbol/string inconsistency later
         npw.current_order[:field].should == :first_name
         npw.current_order[:dir].should == :asc
         npw.current_order[:param_namespace].should == nil 
