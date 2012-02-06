@@ -31,6 +31,12 @@ module WithOrder
               }
             end
           end
+
+          def to_a
+            a = super.extend(CurrentOrder)
+            a.current_order = self.current_order
+            a
+          end
         end
 
         return relation unless relation.current_order[:field]
@@ -53,13 +59,7 @@ module WithOrder
         else
           relation.order(order_text)
         end
-      } do
-        def to_a
-          a = super.extend(CurrentOrder)
-          a.current_order = self.current_order
-          a
-        end
-      end
+      }
     end
   end
 end
