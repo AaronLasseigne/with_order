@@ -140,5 +140,14 @@ describe 'WithOrder::ActiveRecordModelExtention' do
         npw.current_order[:param_namespace].should == :foo 
       end
     end
+
+    context '#to_a' do
+      it 'returns an array with #current_order attached' do
+        npw = NobelPrizeWinner.with_order(:first_name, {param_namespace: :foo}).to_a
+        npw.current_order[:field].should == :first_name
+        npw.current_order[:dir].should == :asc
+        npw.current_order[:param_namespace].should == :foo 
+      end
+    end
   end
 end

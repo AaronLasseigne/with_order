@@ -1,10 +1,14 @@
 module WithOrder
   module ActiveRecordModelExtension
     extend ActiveSupport::Concern
+    
+    module CurrentOrder
+      attr_accessor :current_order
+    end
 
     included do
-      scope :with_order, ->(order = nil, options = {}) {
-        relation = scoped.extending do
+      self.scope :with_order, ->(order = nil, options = {}) {
+        relation = self.scoped.extending do
           if order.is_a?(Hash)
             order = options[:param_namespace] ?
               order[options[:param_namespace].to_sym].try(:[], :order) :
@@ -49,7 +53,13 @@ module WithOrder
         else
           relation.order(order_text)
         end
-      }
+      } do
+        def to_a
+          a = super.extend(CurrentOrder)
+          a.current_order = self.current_order
+          a
+        end
+      end
     end
   end
 end
