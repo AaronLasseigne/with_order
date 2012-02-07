@@ -57,6 +57,16 @@ describe WithOrder::ActionViewExtension do
           :first_name
         ).should == '<a href="/assets?foo%5Border%5D=first_name-desc">DESC</a>'
       end
+
+      it 'works when no params are given' do
+        helper.stub!(:params).and_return({})
+        npw = NobelPrizeWinner.with_order(helper.params, {param_namespace: :foo})
+        helper.link_with_order(
+          (npw.current_order[:field] == :first_name and npw.current_order[:dir] == :asc) ? 'DESC' : 'ASC',
+          npw,
+          :first_name
+        ).should == '<a href="/assets?foo%5Border%5D=first_name-asc">ASC</a>'
+      end
     end
 
     it 'accepts #link_to options' do

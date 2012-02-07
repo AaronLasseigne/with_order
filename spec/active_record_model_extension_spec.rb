@@ -138,6 +138,11 @@ describe 'WithOrder::ActiveRecordModelExtention' do
         npw.current_order[:field].should == :first_name
         npw.current_order[:dir].should == :asc
         npw.current_order[:param_namespace].should == :foo 
+
+        npw = NobelPrizeWinner.with_order({}, {param_namespace: :foo})
+        npw.current_order[:field].should == nil
+        npw.current_order[:dir].should == nil
+        npw.current_order[:param_namespace].should == :foo 
       end
     end
 

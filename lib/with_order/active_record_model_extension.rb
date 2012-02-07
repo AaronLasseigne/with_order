@@ -22,7 +22,7 @@ module WithOrder
             dir ||= :asc
 
             if field.blank?
-              {field: nil, dir: nil, param_namespace: nil}
+              {field: nil, dir: nil, param_namespace: options[:param_namespace].try(:to_sym)}
             else
               {
                 field:           field.to_sym,

@@ -22,7 +22,7 @@ module WithOrder
       )
 
       param_namespace = scope.current_order[:param_namespace]
-      scoped_params = (param_namespace ? params[param_namespace] : params).dup
+      scoped_params = (param_namespace ? params[param_namespace] : params).try(:dup) || {}
       scoped_params.merge!({order: "#{field}-#{dir}"})
 
       link_to(text, param_namespace ? params.merge({param_namespace => scoped_params}) : scoped_params, html_options)
