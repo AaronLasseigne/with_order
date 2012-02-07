@@ -47,11 +47,15 @@ module WithOrder
         else
           field = relation.current_order[:field].to_s
 
-          if field !~ /\./ and relation.column_names.include?(field)
-            field = "#{self.table_name}.#{field}"
+          if field !~ /\./
+            if relation.column_names.include?(field)
+              field = [self.table_name, field].map{|i| relation.connection.quote_column_name(i)}.join('.')
+            else
+              field = relation.connection.quote_column_name(field)
+            end
           end
 
-          order_text = "#{relation.connection.quote_column_name(field)} ASC"
+          order_text = "#{field} ASC"
         end
 
         if relation.current_order[:dir].try(:downcase) == :desc
