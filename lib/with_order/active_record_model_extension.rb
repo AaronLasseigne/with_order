@@ -48,11 +48,8 @@ module WithOrder
           field = relation.current_order[:field].to_s
 
           if field !~ /\./
-            if relation.column_names.include?(field)
-              field = "#{self.table_name}.#{relation.connection.quote_column_name(field)}"
-            else
-              field = relation.connection.quote_column_name(field)
-            end
+            quoted_field = relation.connection.quote_column_name(field)
+            field = relation.column_names.include?(field) ? "#{self.table_name}.#{quoted_field}" : quoted_field
           end
 
           order_text = "#{field} ASC"
