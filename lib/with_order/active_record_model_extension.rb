@@ -56,9 +56,9 @@ module WithOrder
         end
 
         if relation.current_order[:dir].try(:downcase) == :desc
-          relation.order(order_text).reverse_order
+          relation.reorder(order_text).reverse_order
         else
-          relation.order(order_text)
+          relation.reorder(order_text)
         end
       }
     end

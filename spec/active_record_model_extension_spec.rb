@@ -115,6 +115,12 @@ describe 'WithOrder::ActiveRecordModelExtention' do
         npw.reverse_order_value.should == nil
       end
     end
+
+    it 'ignores the default_scope order' do
+      npw = NobelPrizeWinner.with_order(:first_name)
+      npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
+      npw.reverse_order_value.should == nil
+    end
   end
 
   describe 'WithOrder::ActiveRecordModelExtension Relation' do
