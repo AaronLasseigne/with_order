@@ -5,19 +5,19 @@ describe 'WithOrder::ActiveRecordModelExtention' do
     context 'orders using a field' do
       it 'where the order is a hash containing :order' do
         npw = NobelPrizeWinner.with_order({order: 'first_name-asc'})
-        npw.order_values.should == ['"nobel_prize_winners"."first_name" ASC']
+        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
         npw.reverse_order_value.should == nil
       end
 
       it 'where the order is a symbol' do
         npw = NobelPrizeWinner.with_order(:first_name)
-        npw.order_values.should == ['"nobel_prize_winners"."first_name" ASC']
+        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
         npw.reverse_order_value.should == nil
       end
 
       it 'where the order is a string' do
         npw = NobelPrizeWinner.with_order('first_name-asc')
-        npw.order_values.should == ['"nobel_prize_winners"."first_name" ASC']
+        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
         npw.reverse_order_value.should == nil
       end
     end
@@ -25,7 +25,7 @@ describe 'WithOrder::ActiveRecordModelExtention' do
     context 'limit the need for specifying table names to resolve ambiguity' do
       it 'prepends the table name to the field if the field is in the primary table' do
         npw = NobelPrizeWinner.joins(:nobel_prizes).with_order(:id)
-        npw.order_values.should == ['"nobel_prize_winners"."id" ASC']
+        npw.order_values.should == ['nobel_prize_winners."id" ASC']
       end
       
       it 'skips fields where a table is already provided' do
@@ -41,13 +41,13 @@ describe 'WithOrder::ActiveRecordModelExtention' do
 
     it 'reverses order using a field' do
       npw = NobelPrizeWinner.with_order({order: 'first_name-desc'})
-      npw.order_values.should == ['"nobel_prize_winners"."first_name" ASC']
+      npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
       npw.reverse_order_value.should be true
     end
 
     it 'does not break the chain' do
       npw = NobelPrizeWinner.with_order({order: 'first_name-asc'}).limit(1)
-      npw.order_values.should == ['"nobel_prize_winners"."first_name" ASC']
+      npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
       npw.reverse_order_value.should == nil
     end
 
@@ -61,7 +61,7 @@ describe 'WithOrder::ActiveRecordModelExtention' do
     context 'order does not include a direction' do
       it 'defaults to "ASC"' do
         npw = NobelPrizeWinner.with_order({order: 'first_name'})
-        npw.order_values.should == ['"nobel_prize_winners"."first_name" ASC']
+        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
         npw.reverse_order_value.should == nil
       end
     end
@@ -91,13 +91,13 @@ describe 'WithOrder::ActiveRecordModelExtention' do
     context 'options include :default to select a default field to order by' do
       it 'defaults to the field when no order is passed' do
         npw = NobelPrizeWinner.with_order({}, {default: 'first_name-desc'})
-        npw.order_values.should == ['"nobel_prize_winners"."first_name" ASC']
+        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
         npw.reverse_order_value.should be true
       end
 
       it 'does not default to the field when a order is passed' do
         npw = NobelPrizeWinner.with_order({order: 'first_name'}, {default: 'last_name'})
-        npw.order_values.should == ['"nobel_prize_winners"."first_name" ASC']
+        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
         npw.reverse_order_value.should == nil
       end
     end
@@ -105,7 +105,7 @@ describe 'WithOrder::ActiveRecordModelExtention' do
     context 'the :param_namespace option is passed' do
       it 'finds the :order param from the hash using the namespace' do
         npw = NobelPrizeWinner.with_order({foo: {order: 'first_name'}}, {param_namespace: :foo})
-        npw.order_values.should == ['"nobel_prize_winners"."first_name" ASC']
+        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
         npw.reverse_order_value.should == nil
       end
 

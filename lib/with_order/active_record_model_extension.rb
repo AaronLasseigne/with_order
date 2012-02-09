@@ -49,7 +49,7 @@ module WithOrder
 
           if field !~ /\./
             if relation.column_names.include?(field)
-              field = [self.table_name, field].map{|i| relation.connection.quote_column_name(i)}.join('.')
+              field = "#{self.table_name}.#{relation.connection.quote_column_name(field)}"
             else
               field = relation.connection.quote_column_name(field)
             end
