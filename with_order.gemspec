@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.name        = 'with_order'
   s.version     = WithOrder::VERSION
   s.authors     = ['Aaron Lasseigne']
-  s.email       = ['alasseigne@sei-mi.com']
-  s.homepage    = 'https://github.com/sei-mi/with_order'
+  s.email       = ['aaron.lasseigne@gmail.com']
+  s.homepage    = 'https://github.com/AaronLasseigne/with_order'
   s.summary     = %q{Add ordering to lists, tables, etc.}
   s.description = %q{Add ordering to lists, tables, etc.}
 
