@@ -1,7 +1,7 @@
 module WithOrder
   module ActiveRecordModelExtension
     extend ActiveSupport::Concern
-    
+
     module CurrentOrder
       attr_accessor :current_order
     end
@@ -9,10 +9,10 @@ module WithOrder
     included do
       self.scope :with_order, ->(order = nil, options = {}) {
         relation = self.scoped.extending do
+          extend WithOrder::HashExtraction
+
           if order.is_a?(Hash)
-            order = options[:param_namespace] ?
-              order[options[:param_namespace].to_sym].try(:[], :order) :
-              order[:order]
+            order = self.extract_hash_value(order, options.has_key?(:param_namespace) ? "#{options[:param_namespace]}[:order]" : :order)
           end
           order = (order || options[:default]).to_s
 
