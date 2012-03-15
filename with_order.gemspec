@@ -1,25 +1,25 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path('../lib', __FILE__)
-require 'with_order/version'
+require File.expand_path('../lib/with_order/version', __FILE__)
 
-Gem::Specification.new do |s|
-  s.name        = 'with_order'
-  s.version     = WithOrder::VERSION
-  s.authors     = ['Aaron Lasseigne']
-  s.email       = ['aaron.lasseigne@gmail.com']
-  s.homepage    = 'https://github.com/AaronLasseigne/with_order'
-  s.summary     = %q{Add ordering to lists, tables, etc.}
-  s.description = %q{Add ordering to lists, tables, etc.}
+Gem::Specification.new do |gem|
+  gem.name        = 'with_order'
+  gem.version     = WithOrder::VERSION
 
-  s.rubyforge_project = 'with_order'
+  gem.authors     = ['Aaron Lasseigne']
+  gem.email       = ['aaron.lasseigne@gmail.com']
+  gem.summary     = %q{Add ordering to lists, tables, etc.}
+  gem.description = %q{Add ordering to lists, tables, etc.}
+  gem.homepage    = 'https://github.com/AaronLasseigne/with_order'
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ['lib']
+  gem.rubyforge_project = 'with_order'
 
-  s.add_dependency 'rails', '>= 3.1'
+  gem.files         = `git ls-files`.split("\n")
+  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  gem.require_paths = ['lib']
 
-  s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'sqlite3'
+  gem.add_dependency 'rails', '>= 3.1'
+
+  gem.add_development_dependency 'rspec-rails'
+  gem.add_development_dependency 'sqlite3'
 end
