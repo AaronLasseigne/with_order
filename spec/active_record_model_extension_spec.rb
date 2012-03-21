@@ -2,23 +2,42 @@ require 'spec_helper'
 
 describe 'WithOrder::ActiveRecordModelExtention' do
   describe '#with_order(order, options = {})' do
-    context 'orders using a field' do
-      it 'where the order is a hash containing :order' do
+    context 'order' do
+      it 'can be a hash containing :order' do
         npw = NobelPrizeWinner.with_order({order: 'first_name-asc'})
         npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
         npw.reverse_order_value.should == nil
       end
 
-      it 'where the order is a symbol' do
+      it 'can be a symbol' do
         npw = NobelPrizeWinner.with_order(:first_name)
         npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
         npw.reverse_order_value.should == nil
       end
 
-      it 'where the order is a string' do
+      it 'can be a string' do
         npw = NobelPrizeWinner.with_order('first_name-asc')
         npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
         npw.reverse_order_value.should == nil
+      end
+
+      context 'does not include a direction' do
+        it 'defaults to "ASC"' do
+          npw = NobelPrizeWinner.with_order({order: 'first_name'})
+          npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
+          npw.reverse_order_value.should == nil
+        end
+      end
+
+      it 'can be descending' do
+        npw = NobelPrizeWinner.with_order({order: 'first_name-desc'})
+        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
+        npw.reverse_order_value.should be true
+      end
+
+      it 'can be blank and have no default' do
+        npw = NobelPrizeWinner.with_order.limit(1)
+        npw.order_values.should == []
       end
     end
 
@@ -39,87 +58,68 @@ describe 'WithOrder::ActiveRecordModelExtention' do
       end
     end
 
-    it 'reverses order using a field' do
-      npw = NobelPrizeWinner.with_order({order: 'first_name-desc'})
-      npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
-      npw.reverse_order_value.should be true
-    end
-
     it 'does not break the chain' do
       npw = NobelPrizeWinner.with_order({order: 'first_name-asc'}).limit(1)
       npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
       npw.reverse_order_value.should == nil
     end
 
-    context 'order is blank' do
-      it 'skips the order' do
-        npw = NobelPrizeWinner.with_order.limit(1)
-        npw.order_values.should == []
-      end
-    end
-
-    context 'order does not include a direction' do
-      it 'defaults to "ASC"' do
-        npw = NobelPrizeWinner.with_order({order: 'first_name'})
-        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
-        npw.reverse_order_value.should == nil
-      end
-    end
-
-    context 'options include :fields to define custom ORDER BY statements' do
-      it 'orders using custom fields' do
-        npw = NobelPrizeWinner.with_order({order: 'full_name'}, {
-          fields: {
-            full_name: 'first_name ASC, last_name ASC'
-          }
-        })
-        npw.order_values.should == ['first_name ASC, last_name ASC']
-        npw.reverse_order_value.should == nil
-      end
-
-      it 'reverses order using custom fields' do
-        npw = NobelPrizeWinner.with_order({order: 'full_name-desc'}, {
-          fields: {
-            full_name: 'first_name ASC, last_name ASC'
-          }
-        })
-        npw.order_values.should == ['first_name ASC, last_name ASC']
-        npw.reverse_order_value.should be true
-      end
-    end
-
-    context 'options include :default to select a default field to order by' do
-      it 'defaults to the field when no order is passed' do
-        npw = NobelPrizeWinner.with_order({}, {default: 'first_name-desc'})
-        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
-        npw.reverse_order_value.should be true
-      end
-
-      it 'does not default to the field when a order is passed' do
-        npw = NobelPrizeWinner.with_order({order: 'first_name'}, {default: 'last_name'})
-        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
-        npw.reverse_order_value.should == nil
-      end
-    end
-
-    context 'the :param_namespace option is passed' do
-      it 'finds the :order param from the hash using the namespace' do
-        npw = NobelPrizeWinner.with_order({foo: {order: 'first_name'}}, {param_namespace: :foo})
-        npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
-        npw.reverse_order_value.should == nil
-      end
-
-      it 'skips order if it cannot find :order in the namespace' do
-        npw = NobelPrizeWinner.with_order({bar: {order: 'first_name'}}, {param_namespace: :foo})
-        npw.order_values.should == []
-        npw.reverse_order_value.should == nil
-      end
-    end
-
-    it 'ignores the default_scope order' do
+    it 'ignores order in the default_scope' do
       npw = NobelPrizeWinner.with_order(:first_name)
       npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
       npw.reverse_order_value.should == nil
+    end
+
+    context 'options' do
+      context ':fields' do
+        it 'orders the field by a custom ORDER BY statement' do
+          npw = NobelPrizeWinner.with_order({order: 'full_name'}, {
+            fields: {
+              full_name: 'first_name ASC, last_name ASC'
+            }
+          })
+          npw.order_values.should == ['first_name ASC, last_name ASC']
+          npw.reverse_order_value.should == nil
+        end
+
+        it 'can reverse the field order when using a custom ORDER BY statement' do
+          npw = NobelPrizeWinner.with_order({order: 'full_name-desc'}, {
+            fields: {
+            full_name: 'first_name ASC, last_name ASC'
+          }
+          })
+          npw.order_values.should == ['first_name ASC, last_name ASC']
+          npw.reverse_order_value.should be true
+        end
+      end
+
+      context ':default' do
+        it 'defaults to the field when no order is passed' do
+          npw = NobelPrizeWinner.with_order({}, {default: 'first_name-desc'})
+          npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
+          npw.reverse_order_value.should be true
+        end
+
+        it 'does not default to the field when a order is passed' do
+          npw = NobelPrizeWinner.with_order({order: 'first_name'}, {default: 'last_name'})
+          npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
+          npw.reverse_order_value.should == nil
+        end
+      end
+
+      context ':param_namespace' do
+        it 'finds the :order param from the hash using the namespace' do
+          npw = NobelPrizeWinner.with_order({foo: {order: 'first_name'}}, {param_namespace: :foo})
+          npw.order_values.should == ['nobel_prize_winners."first_name" ASC']
+          npw.reverse_order_value.should == nil
+        end
+
+        it 'skips order if it cannot find :order in the namespace' do
+          npw = NobelPrizeWinner.with_order({bar: {order: 'first_name'}}, {param_namespace: :foo})
+          npw.order_values.should == []
+          npw.reverse_order_value.should == nil
+        end
+      end
     end
   end
 

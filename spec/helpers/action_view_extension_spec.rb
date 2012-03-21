@@ -34,16 +34,29 @@ describe WithOrder::ActionViewExtension do
       end
     end
 
-    context 'the :dir option is passed' do
-      it 'uses the provided :dir option as the param value' do
+    context 'options' do
+      context ':dir' do
+        it 'locks in the direction of the param value' do
+          helper.stub!(:params).and_return({order: 'first_name-asc'})
+          npw = NobelPrizeWinner.with_order(helper.params)
+          helper.link_with_order(
+            'ASC',
+            npw,
+            :first_name,
+            {dir: :asc}
+          ).should == '<a href="/assets?order=first_name-asc">ASC</a>'
+        end
+      end
+
+      it 'passes other options to #link_to' do
         helper.stub!(:params).and_return({order: 'first_name-asc'})
         npw = NobelPrizeWinner.with_order(helper.params)
         helper.link_with_order(
           'ASC',
           npw,
           :first_name,
-          {dir: :asc}
-        ).should == '<a href="/assets?order=first_name-asc">ASC</a>'
+          {dir: :asc, remote: true}
+        ).should == '<a href="/assets?order=first_name-asc" data-remote="true">ASC</a>'
       end
     end
 
@@ -67,17 +80,6 @@ describe WithOrder::ActionViewExtension do
           :first_name
         ).should == '<a href="/assets?foo%5Border%5D=first_name-asc">ASC</a>'
       end
-    end
-
-    it 'accepts #link_to options' do
-      helper.stub!(:params).and_return({order: 'first_name-asc'})
-      npw = NobelPrizeWinner.with_order(helper.params)
-      helper.link_with_order(
-        'ASC',
-        npw,
-        :first_name,
-        {dir: :asc, remote: true}
-      ).should == '<a href="/assets?order=first_name-asc" data-remote="true">ASC</a>'
     end
 
     it 'accepts blocks' do
