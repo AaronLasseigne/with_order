@@ -10,7 +10,7 @@ This project follows [Semantic Versioning](http://semver.org/).
 
 If you're using Bundler, add this to your Gemfile:
 
-    gem 'with_order', '~>0.1.0'
+    gem 'with_order', '~>0.2.0'
 
 ## Support
 
